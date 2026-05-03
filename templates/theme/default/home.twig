@@ -162,21 +162,6 @@
         .post-row { grid-template-columns: 1fr; gap: .25rem; padding: 1.25rem 0; }
     }
 
-    /* ---------- contact ---------- */
-    .contact-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 4rem;
-        align-items: start;
-    }
-    @media (max-width: 760px) {
-        .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-    }
-    .contact-info ul { list-style: none; padding: 0; display: grid; gap: 1rem; }
-    .contact-info a { color: var(--text-soft); display: inline-flex; align-items: center; gap: .5rem; }
-    .contact-info a:hover { color: var(--accent); }
-    .contact-info .mono { font-family: 'JetBrains Mono', monospace; font-size: .9375rem; }
-
     /* ---------- award badge ---------- */
     .award-badge {
         position: absolute;
@@ -211,7 +196,7 @@
             <p class="lede" data-reveal>Developer &amp; digital creator working on web apps, mobile, immersive tech, and privacy-first systems. Based in Lausanne. Currently exploring the edges of where AI meets useful software.</p>
             <div class="hero-cta" data-reveal>
                 <a href="/projects" class="btn btn-primary">View my work →</a>
-                <a href="#contact" class="btn btn-ghost">Get in touch</a>
+                <a href="/contact" class="btn btn-ghost">Get in touch</a>
             </div>
         </div>
     </div>
@@ -302,46 +287,4 @@
 </section>
 {% endif %}
 
-<section id="contact">
-    <div class="wrap">
-        <div class="section-head" data-reveal>
-            <div>
-                <span class="meta">// contact</span>
-                <h2>Let's <em style="font-family:inherit;font-style:italic;">talk</em>.</h2>
-            </div>
-        </div>
-        <div class="contact-grid">
-            <div class="contact-info" data-reveal>
-                <p class="lede">Got a project, an idea, or just want to chat about VR, privacy, or why your favourite framework is wrong? My inbox is open.</p>
-                <ul>
-                    <li><a href="mailto:robertobendi@outlook.it"><span class="mono">robertobendi@outlook.it</span></a></li>
-                    <li><a href="https://github.com/robertobendi" rel="noopener">GitHub ↗ <span class="mono">@robertobendi</span></a></li>
-                    <li><a href="https://linkedin.com/in/robertobendi" rel="noopener">LinkedIn ↗</a></li>
-                    <li><a href="https://twitter.com/robbendinelli" rel="noopener">Twitter / X ↗ <span class="mono">@robbendinelli</span></a></li>
-                    <li><a href="https://bsky.app/profile/robendi.com" rel="noopener">Bluesky ↗ <span class="mono">@robendi.com</span></a></li>
-                </ul>
-            </div>
-            <form class="form" method="post" action="/forms/contact" data-reveal>
-                <div class="form-row">
-                    <label for="contact-name">Name</label>
-                    <input id="contact-name" type="text" name="name" required>
-                </div>
-                <div class="form-row">
-                    <label for="contact-email">Email</label>
-                    <input id="contact-email" type="email" name="email" required>
-                </div>
-                <div class="form-row">
-                    <label for="contact-subject">Subject</label>
-                    <input id="contact-subject" type="text" name="subject">
-                </div>
-                <div class="form-row">
-                    <label for="contact-message">Message</label>
-                    <textarea id="contact-message" name="message" required></textarea>
-                </div>
-                <input type="text" name="_hp" class="form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
-                <button type="submit" class="btn btn-primary">Send message →</button>
-            </form>
-        </div>
-    </div>
-</section>
 {% endblock %}

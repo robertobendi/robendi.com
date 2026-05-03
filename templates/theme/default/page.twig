@@ -38,4 +38,38 @@
     </article>
 </section>
 {% endif %}
+
+{% if entry.slug == 'contact' %}
+<section class="tight" style="padding-top:0;">
+    <div class="wrap-prose">
+        <form class="form" method="post" action="/forms/contact">
+            <div class="form-row">
+                <label for="contact-name">Name</label>
+                <input id="contact-name" type="text" name="name" required autocomplete="name">
+            </div>
+            <div class="form-row">
+                <label for="contact-email">Email</label>
+                <input id="contact-email" type="email" name="email" required autocomplete="email">
+            </div>
+            <div class="form-row">
+                <label for="contact-subject">Subject</label>
+                <input id="contact-subject" type="text" name="subject">
+            </div>
+            <div class="form-row">
+                <label for="contact-message">Message</label>
+                <textarea id="contact-message" name="message" required></textarea>
+            </div>
+            <input type="text" name="_hp" class="form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <button type="submit" class="btn btn-primary">Send message →</button>
+        </form>
+        <p style="margin-top:2.5rem;color:var(--text-mute);font-size:.875rem;">
+            Or find me elsewhere:
+            <a href="https://github.com/robertobendi" rel="noopener" style="color:var(--text-soft);border-bottom:1px solid var(--line-strong);padding-bottom:1px;margin:0 .25rem;">GitHub</a>·
+            <a href="https://linkedin.com/in/robertobendi" rel="noopener" style="color:var(--text-soft);border-bottom:1px solid var(--line-strong);padding-bottom:1px;margin:0 .25rem;">LinkedIn</a>·
+            <a href="https://twitter.com/robbendinelli" rel="noopener" style="color:var(--text-soft);border-bottom:1px solid var(--line-strong);padding-bottom:1px;margin:0 .25rem;">Twitter</a>·
+            <a href="https://bsky.app/profile/robendi.com" rel="noopener" style="color:var(--text-soft);border-bottom:1px solid var(--line-strong);padding-bottom:1px;margin:0 .25rem;">Bluesky</a>
+        </p>
+    </div>
+</section>
+{% endif %}
 {% endblock %}
