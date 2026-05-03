@@ -1,23 +1,32 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# --- Pebblestack: per-install state (never commit) ---
+/data/*.sqlite
+/data/*.sqlite-journal
+/data/*.sqlite-wal
+/data/*.sqlite-shm
+/data/installed.lock
+/data/cache/
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+# User uploads, but keep the security .htaccess + keepfile.
+/uploads/*
+!/uploads/.gitkeep
+!/uploads/.htaccess
 
-# testing
-/coverage
+# --- Legacy React (archived in _legacy_react/) ---
+/_legacy_react/node_modules
+/_legacy_react/build
+/_legacy_react/.pnp
+/_legacy_react/.pnp.js
+/_legacy_react/coverage
+/_legacy_react/.env.local
+/_legacy_react/.env.development.local
+/_legacy_react/.env.test.local
+/_legacy_react/.env.production.local
+/_legacy_react/npm-debug.log*
+/_legacy_react/yarn-debug.log*
+/_legacy_react/yarn-error.log*
 
-# production
-/build
-
-# misc
+# --- Editor / OS clutter ---
 .DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+.idea/
+.vscode/
+*.log

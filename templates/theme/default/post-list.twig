@@ -1,0 +1,69 @@
+{% extends '@theme/layout.twig' %}
+
+{% block title %}Blog · {{ site.name }}{% endblock %}
+{% block head %}
+<meta name="description" content="Writing by Roberto Bendinelli on software, VR, privacy, and the occasional rant.">
+<style>
+    .page-head { padding: 9rem 0 4rem; }
+    .page-head h1 { margin: 0 0 1rem; }
+
+    .post-row {
+        display: grid;
+        grid-template-columns: 130px 1fr auto;
+        gap: 2.5rem;
+        padding: 2rem 0;
+        border-bottom: 1px solid var(--line);
+        align-items: baseline;
+        color: inherit;
+        transition: padding .25s var(--easing);
+    }
+    .post-row:hover { color: inherit; padding-left: .5rem; }
+    .post-row:hover h2 { color: var(--accent); }
+    .post-row .date { color: var(--text-mute); font-family: 'JetBrains Mono', monospace; font-size: .8125rem; }
+    .post-row h2 { margin: 0 0 .35rem; font-size: clamp(1.375rem, 2.5vw, 1.875rem); transition: color .25s var(--easing); }
+    .post-row .excerpt { color: var(--text-soft); font-size: .9375rem; margin: 0; max-width: 56ch; }
+    .post-row .arrow { color: var(--text-mute); transition: color .25s var(--easing); align-self: center; }
+    .post-row:hover .arrow { color: var(--accent); }
+
+    @media (max-width: 700px) {
+        .post-row { grid-template-columns: 1fr; gap: .35rem; padding: 1.5rem 0; }
+        .post-row:hover { padding-left: 0; }
+        .post-row .arrow { display: none; }
+    }
+
+    .empty { text-align: center; padding: 6rem 1rem; color: var(--text-mute); }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="page-head">
+    <div class="wrap">
+        <span class="meta" data-reveal>// writing</span>
+        <h1 data-reveal>Blog.</h1>
+        <p class="lede" data-reveal>Notes, tutorials, opinions. Mostly about software. Sometimes about VR. Occasionally a rant.</p>
+    </div>
+</section>
+
+<section class="tight">
+    <div class="wrap">
+        {% if entries|length == 0 %}
+            <div class="empty">
+                <p>No posts yet — check back soon, or write the first one in <a href="/admin">/admin</a>.</p>
+            </div>
+        {% else %}
+            <div data-reveal>
+                {% for post in entries %}
+                    <a class="post-row" href="/blog/{{ post.slug }}">
+                        <span class="date">{{ (post.publishAt ?? post.createdAt)|date('M j, Y') }}</span>
+                        <div>
+                            <h2>{{ post.field('title', '(untitled)') }}</h2>
+                            {% if post.field('excerpt') %}<p class="excerpt">{{ post.field('excerpt') }}</p>{% endif %}
+                        </div>
+                        <span class="arrow">→</span>
+                    </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

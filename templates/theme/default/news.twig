@@ -1,0 +1,78 @@
+{% extends '@theme/layout.twig' %}
+{% set meta_description = entry.field('excerpt') %}
+
+{% block title %}{{ entry.field('title') }} · News · {{ site.name }}{% endblock %}
+
+{% block head %}
+{% if entry.field('cover_image') %}<meta property="og:image" content="{{ entry.field('cover_image') }}">{% endif %}
+<style>
+    .news-head { padding: 9rem 0 2.5rem; }
+    .news-head .crumb { color: var(--text-mute); font-family: 'JetBrains Mono', monospace; font-size: .8125rem; margin-bottom: 1.5rem; display: inline-block; }
+    .news-head .crumb a { color: var(--text-mute); border-bottom: 1px solid var(--line-strong); padding-bottom: 1px; }
+    .news-head .crumb a:hover { color: var(--accent); border-color: var(--accent); }
+
+    .news-head .badge-row { display: flex; gap: .75rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center; }
+    .news-head .source-pill {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: .75rem;
+        padding: .35rem .85rem;
+        border: 1px solid var(--accent-2);
+        color: var(--accent-2);
+        border-radius: 999px;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+    }
+    .news-head .kind, .news-head .date {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: .8125rem;
+        color: var(--text-mute);
+    }
+    .news-head h1 { margin: 0 0 1rem; }
+    .news-head .excerpt { font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(1.25rem, 2.5vw, 1.75rem); color: var(--text); line-height: 1.4; max-width: 56ch; margin: 0 0 2rem; font-style: italic; }
+    .news-head .actions { display: flex; gap: .75rem; flex-wrap: wrap; }
+
+    .news-cover { margin: 0 auto 4rem; max-width: 1080px; padding: 0 clamp(1.25rem, 4vw, 2.5rem); }
+    .news-cover img { width: 100%; border-radius: var(--radius); border: 1px solid var(--line); }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="news-head">
+    <div class="wrap">
+        <a class="crumb" href="/news">← All news</a>
+        <div class="badge-row" data-reveal>
+            <span class="source-pill">{{ entry.field('source') }}</span>
+            {% if entry.field('kind') %}<span class="kind">{{ entry.field('kind') }}</span>{% endif %}
+            <span class="date">{{ (entry.publishAt ?? entry.createdAt)|date('F j, Y') }}</span>
+        </div>
+        <h1 data-reveal>{{ entry.field('title') }}</h1>
+        {% if entry.field('excerpt') %}<p class="excerpt" data-reveal>“{{ entry.field('excerpt') }}”</p>{% endif %}
+        {% if entry.field('source_url') %}
+            <div class="actions" data-reveal>
+                <a class="btn btn-primary" href="{{ entry.field('source_url') }}" rel="noopener">Read on {{ entry.field('source') }} ↗</a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+{% if entry.field('cover_image') %}
+<div class="news-cover" data-reveal>
+    <img src="{{ entry.field('cover_image') }}" alt="{{ entry.field('title') }}" loading="eager" decoding="async" fetchpriority="high" width="1200" height="900">
+</div>
+{% endif %}
+
+{% if entry.field('body') %}
+<section class="tight">
+    <article class="wrap-prose article-body" data-reveal>
+        {{ entry.field('body')|markdown }}
+    </article>
+</section>
+{% endif %}
+
+<section class="tight">
+    <div class="wrap-prose" style="text-align:center;">
+        <hr>
+        <p style="color:var(--text-mute);"><a href="/news" style="color:var(--accent);border-bottom:1px solid var(--accent);">← All news &amp; press</a></p>
+    </div>
+</section>
+{% endblock %}

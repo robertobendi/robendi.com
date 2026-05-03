@@ -1,107 +1,70 @@
-# RePlate 🚀
+# robendi.com
 
-[![React](https://img.shields.io/badge/React-17.0.2-blue.svg)](https://reactjs.org/)
-[![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
-[![React Router](https://img.shields.io/badge/React_Router-6.2.1-CA4245?logo=react-router)](https://reactrouter.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+Personal site of Roberto Bendinelli. Built on [Pebblestack](https://github.com/robertobendi/pebblestack) — a small PHP 8.2 + SQLite + Twig CMS that drops onto any shared host.
 
-A minimal, modern React.js template designed to jumpstart your web projects. RePlate provides a clean, well-organized foundation with essential features pre-configured, allowing you to focus on building your application rather than setting up boilerplate code.
+## Stack
 
-## ✨ Features
+- **Backend / CMS:** Pebblestack (PHP 8.2, SQLite, Twig)
+- **Frontend:** Server-rendered Twig theme in `templates/theme/default/` — vanilla CSS, vanilla JS, animated canvas background, no build step.
+- **Hosting:** Hostinger shared PHP hosting (or any PHP 8.2+ host with `mod_rewrite`).
 
-- **Modern Tech Stack**
-  - React 17
-  - React Router v6
-  - Tailwind CSS for styling
-  - PostCSS & Autoprefixer
+## Deploy to Hostinger
 
-- **Pre-built Components**
-  - Responsive Navigation Bar
-  - Modern Footer
-  - 404 Not Found Page
-  - Contact Form
-
-- **Developer Experience**
-  - Clean project structure
-  - Modular component architecture
-  - Ready-to-use routing setup
-  - Responsive design out of the box
-
-## 🚀 Quick Start
-
-```bash
-# Clone the repository
-git clone https://github.com/robertobendi/RePlate.git
-
-# Navigate to project directory
-cd RePlate
-
-# Install dependencies
-npm install
-
-# Start development server
-npm start
-```
-
-## 📁 Project Structure
-
-```
-RePlate/
-├── public/
-├── src/
-│   ├── components/
-│   │   ├── Navbar.js
-│   │   └── Footer.js
-│   ├── pages/
-│   │   ├── Home.js
-│   │   └── Page1.js
-│   ├── App.js
-│   └── index.js
-├── package.json
-└── README.md
-```
-
-## 🛠️ Built With
-
-- [React](https://reactjs.org/) - A JavaScript library for building user interfaces
-- [React Router](https://reactrouter.com/) - Declarative routing for React
-- [Tailwind CSS](https://tailwindcss.com/) - A utility-first CSS framework
-
-## 📝 Usage
-
-1. **Navigation**: Use React Router's `Link` component to navigate between pages
-   ```jsx
-   import { Link } from 'react-router-dom';
-   
-   <Link to="/page1">Go to Page 1</Link>
+1. **Zip** the entire repo *except* `_legacy_react/` and `.git`:
+   ```sh
+   zip -r robendi.zip . -x "_legacy_react/*" ".git/*" ".DS_Store"
    ```
+2. **Upload** to Hostinger via the File Manager → `public_html/`. Extract there. The folder layout under `public_html/` should look like `index.php`, `.htaccess`, `config/`, `src/`, `templates/`, `vendor/`, `data/`, `uploads/`.
+3. **Permissions** (only if installer fails): `data/` and `uploads/` need to be writable by PHP. Hostinger defaults usually work; otherwise set to `775`.
+4. **Run the installer:** visit `https://robendi.com/install.php`. Pick site name (`robendi.com`), admin email, password.
+5. **Done.** Public site at `/`, admin at `/admin`.
 
-2. **Styling**: Utilize Tailwind CSS classes for styling components
-   ```jsx
-   <div className="container mx-auto px-4">
-     <h1 className="text-2xl font-bold">Hello World</h1>
-   </div>
-   ```
+## Content management
 
-## 🤝 Contributing
+After install, log in to `/admin` and add content into these collections:
 
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/robertobendi/RePlate/issues).
+| Collection | Where it shows | Notes |
+|---|---|---|
+| **Pages**       | `/{slug}`         | Static pages — about, uses, etc. Use slug `home` to override the homepage entirely. |
+| **Projects**    | `/projects`, `/projects/{slug}` | Portfolio entries. Featured projects also live in `home.twig` (hardcoded for design control). |
+| **Blog Posts**  | `/blog`, `/blog/{slug}` | Long-form writing. Recent 4 surface on the homepage. |
+| **News & Press**| `/news`, `/news/{slug}` | Articles *about* you — press, interviews, features. |
+| **Contact**     | form on home `/#contact` | Submissions land in `/admin/forms/contact`. |
+| **Newsletter**  | form on home (newsletter section) | Email captures land in `/admin/forms/newsletter`. Export to your email tool when ready. |
 
-## 📜 License
+Edit collections in `config/collections.php`. Edit the look in `templates/theme/default/`.
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Local dev
 
-## 👤 Author
+```sh
+# Built-in PHP server (no Composer / no Node needed — vendor/ is shipped)
+php -S localhost:8080 -t . index.php
+# Then visit http://localhost:8080/install.php
+```
 
-**Roberto Bendinelli**
+## Repo layout
 
-- GitHub: [@robertobendi](https://github.com/robertobendi)
+```
+index.php            # front controller
+install.php          # first-run installer
+.htaccess            # rewrites + security
+config/              # app.php (site settings) + collections.php (content shape)
+templates/
+  admin/             # admin UI — don't edit
+  theme/default/     # the public-facing site — edit freely
+src/                 # Pebblestack framework — don't edit
+data/                # SQLite db + migrations (writable, gitignored)
+uploads/             # media library (writable, gitignored)
+vendor/              # Composer deps (shipped — no install step)
+_legacy_react/       # archived previous React/Vite version of robendi.com
+```
 
-## 🙏 Acknowledgments
+## Editing the theme
 
-- Thanks to all contributors who help improve this template
-- Inspired by modern web development best practices
+Everything visual is in `templates/theme/default/`. Each template extends `layout.twig`, which holds the global head, fonts, design tokens (CSS variables in `:root`), the animated canvas background, the nav, and the footer.
 
----
+To rebrand globally: change the CSS variables in `layout.twig`'s `<style>` block (e.g. `--accent`, `--gradient`, `--ink-0`).
 
-⭐️ Star this repository if you find it helpful!
+## License
+
+MIT.

@@ -1,0 +1,215 @@
+{% extends '@theme/layout.twig' %}
+
+{% block title %}Projects · {{ site.name }}{% endblock %}
+{% block head %}
+<meta name="description" content="Selected projects by Roberto Bendinelli — web, mobile, VR, and privacy-first software.">
+<style>
+    .page-head { padding: 9rem 0 5rem; }
+    .page-head .meta { margin-bottom: 1rem; }
+    .page-head h1 {
+        margin: 0 0 1rem;
+        font-size: clamp(3rem, 8vw, 6rem);
+        letter-spacing: -.025em;
+    }
+    .page-head h1 em {
+        font-style: italic;
+        background: var(--gradient);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    /* ---------- editorial rows ---------- */
+    .project-rows { display: grid; gap: 0; }
+
+    .project-row {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+        gap: clamp(2rem, 6vw, 5rem);
+        align-items: start;
+        padding: clamp(3rem, 6vw, 5rem) 0;
+        border-top: 1px solid var(--line);
+    }
+    .project-row:first-child { border-top: 0; padding-top: 1rem; }
+    .project-row:nth-child(even) { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); }
+    .project-row:nth-child(even) .cover-wrap { order: 2; }
+    .project-row:nth-child(even) .info       { order: 1; }
+
+    .cover-wrap {
+        aspect-ratio: 4/3;
+        border-radius: var(--radius);
+        border: 1px solid var(--line);
+        background: var(--ink-2);
+        overflow: hidden;
+        position: relative;
+    }
+    .cover-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform .6s var(--easing);
+    }
+    .project-row:hover .cover-wrap img { transform: scale(1.03); }
+
+    .info { padding-top: .25rem; min-width: 0; }
+
+    .kicker {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: .75rem;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        color: var(--text-mute);
+        margin: 0 0 1.25rem;
+    }
+    .kicker .sep { opacity: .35; margin: 0 .5rem; }
+
+    .info h2 {
+        font-size: clamp(2rem, 4.5vw, 3.25rem);
+        line-height: 1.02;
+        letter-spacing: -.02em;
+        margin: 0 0 1.5rem;
+    }
+    .info h2 a {
+        color: var(--text);
+        background-image: linear-gradient(var(--accent-2), var(--accent-2));
+        background-size: 0% 1px;
+        background-repeat: no-repeat;
+        background-position: 0 100%;
+        transition: background-size .5s var(--easing);
+    }
+    .info h2 a:hover { background-size: 100% 1px; color: var(--text); }
+    /* Stretched link: clicking anywhere on the row navigates to the project. */
+    .info h2 a::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+    }
+
+    .award-line {
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        padding: .4rem .85rem;
+        border-radius: 999px;
+        background: linear-gradient(135deg, rgba(255,200,80,.13), rgba(255,140,60,.08));
+        border: 1px solid rgba(255,180,80,.35);
+        color: rgb(255,210,140);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: .75rem;
+        font-weight: 500;
+        letter-spacing: .02em;
+        margin-bottom: 1.5rem;
+    }
+    .award-line svg { flex-shrink: 0; }
+
+    .summary {
+        font-size: 1.0625rem;
+        line-height: 1.6;
+        color: var(--text-soft);
+        margin: 0 0 1.5rem;
+        max-width: 56ch;
+    }
+
+    .tags {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: .75rem;
+        color: var(--text-mute);
+        margin: 0 0 2rem;
+        line-height: 1.8;
+    }
+    .tags span::after { content: ' · '; opacity: .4; }
+    .tags span:last-child::after { content: ''; }
+
+    .links {
+        display: flex;
+        gap: 1.75rem;
+        position: relative;
+        z-index: 2;
+    }
+    .links a {
+        color: var(--text-soft);
+        font-size: .875rem;
+        font-weight: 500;
+        border-bottom: 1px solid var(--line-strong);
+        padding-bottom: 3px;
+        transition: color .2s var(--easing), border-color .2s var(--easing);
+    }
+    .links a:hover { color: var(--accent); border-color: var(--accent); }
+
+    .empty { text-align: center; padding: 6rem 1rem; color: var(--text-mute); }
+
+    @media (max-width: 820px) {
+        .project-row,
+        .project-row:nth-child(even) {
+            grid-template-columns: 1fr;
+            gap: 1.75rem;
+            padding: 2.5rem 0;
+        }
+        .project-row:nth-child(even) .cover-wrap { order: 0; }
+        .project-row:nth-child(even) .info       { order: 0; }
+        .info h2 { font-size: 1.875rem; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="page-head">
+    <div class="wrap">
+        <span class="meta" data-reveal>// portfolio</span>
+        <h1 data-reveal>Selected <em>work</em>.</h1>
+        <p class="lede" data-reveal>Things I've built across web, mobile, VR, and privacy systems. Most of them work — a few even won prizes.</p>
+    </div>
+</section>
+
+<section class="tight" style="padding-top:0;">
+    <div class="wrap">
+        {% if entries|length == 0 %}
+            <div class="empty">
+                <p>No projects published yet — add some via <a href="/admin">/admin</a>.</p>
+            </div>
+        {% else %}
+            <div class="project-rows" data-reveal>
+                {% for p in entries %}
+                    {% set year = p.field('year') ?: (p.publishAt ?? p.createdAt)|date('Y') %}
+                    <article class="project-row">
+                        <div class="cover-wrap">
+                            {% if p.field('cover_image') %}
+                                <img src="{{ p.field('cover_image')|escape('html_attr') }}" alt="{{ p.field('title') }}" loading="lazy" decoding="async" width="1200" height="900">
+                            {% endif %}
+                        </div>
+                        <div class="info">
+                            <div class="kicker">
+                                <span>{{ year }}</span>
+                                <span class="sep">·</span>
+                                <span>{{ '%02d'|format(loop.index) }} / {{ '%02d'|format(loop.length) }}</span>
+                            </div>
+                            <h2><a href="/projects/{{ p.slug }}">{{ p.field('title') }}</a></h2>
+                            {% if p.field('award') %}
+                                <div class="award-line">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                                    {{ p.field('award') }}
+                                </div>
+                            {% endif %}
+                            <p class="summary">{{ p.field('summary') }}</p>
+                            {% if p.field('technologies') %}
+                                <div class="tags">
+                                    {% for t in p.field('technologies')|split(',') %}
+                                        <span>{{ t|trim }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="links">
+                                {% if p.field('github_url') %}<a href="{{ p.field('github_url') }}" rel="noopener">GitHub ↗</a>{% endif %}
+                                {% if p.field('live_url') %}<a href="{{ p.field('live_url') }}" rel="noopener">Live demo ↗</a>{% endif %}
+                            </div>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

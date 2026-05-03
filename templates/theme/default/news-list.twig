@@ -1,0 +1,115 @@
+{% extends '@theme/layout.twig' %}
+
+{% block title %}News &amp; Press · {{ site.name }}{% endblock %}
+{% block head %}
+<meta name="description" content="Press mentions, interviews, features, and articles about Roberto Bendinelli.">
+<style>
+    .page-head { padding: 9rem 0 4rem; }
+    .page-head h1 { margin: 0 0 1rem; }
+
+    .news-list { display: grid; gap: 0; }
+    .news-item {
+        display: grid;
+        grid-template-columns: 1fr 320px;
+        gap: 3rem;
+        padding: 3rem 0;
+        border-bottom: 1px solid var(--line);
+        align-items: start;
+        color: inherit;
+    }
+    .news-item:hover { color: inherit; }
+    .news-item:hover h2 { color: var(--accent); }
+    .news-item .info .meta-row {
+        display: flex; gap: .75rem; align-items: center;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+    }
+    .news-item .source-pill {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: .75rem;
+        padding: .25rem .65rem;
+        border: 1px solid var(--accent-2);
+        color: var(--accent-2);
+        border-radius: 999px;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+    }
+    .news-item .kind {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: .75rem;
+        color: var(--text-mute);
+    }
+    .news-item .date {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: .8125rem;
+        color: var(--text-mute);
+    }
+    .news-item h2 {
+        font-size: clamp(1.5rem, 3vw, 2.25rem);
+        margin: 0 0 .75rem;
+        transition: color .25s var(--easing);
+    }
+    .news-item .excerpt { color: var(--text-soft); margin: 0 0 1rem; max-width: 60ch; }
+    .news-item .read {
+        color: var(--text-soft);
+        font-size: .875rem;
+        border-bottom: 1px solid var(--line-strong);
+        padding-bottom: 2px;
+    }
+    .news-item .cover {
+        aspect-ratio: 4/3;
+        background: var(--ink-2);
+        background-size: cover;
+        background-position: center;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--line);
+    }
+
+    @media (max-width: 760px) {
+        .news-item { grid-template-columns: 1fr; gap: 1.5rem; }
+        .news-item .cover { aspect-ratio: 16/9; order: -1; }
+    }
+
+    .empty { text-align: center; padding: 6rem 1rem; color: var(--text-mute); }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="page-head">
+    <div class="wrap">
+        <span class="meta" data-reveal>// press &amp; mentions</span>
+        <h1 data-reveal>What people are saying.</h1>
+        <p class="lede" data-reveal>Articles, interviews, features, and the odd podcast appearance. Mostly things written about my work — sometimes things I wrote that landed elsewhere.</p>
+    </div>
+</section>
+
+<section class="tight">
+    <div class="wrap">
+        {% if entries|length == 0 %}
+            <div class="empty">
+                <p>No press yet. Add the first piece via <a href="/admin">/admin</a>.</p>
+            </div>
+        {% else %}
+            <div class="news-list">
+                {% for n in entries %}
+                    <a class="news-item" href="/news/{{ n.slug }}" data-reveal>
+                        <div class="info">
+                            <div class="meta-row">
+                                <span class="source-pill">{{ n.field('source') }}</span>
+                                {% if n.field('kind') %}<span class="kind">{{ n.field('kind') }}</span>{% endif %}
+                                <span class="date">{{ (n.publishAt ?? n.createdAt)|date('F j, Y') }}</span>
+                            </div>
+                            <h2>{{ n.field('title') }}</h2>
+                            {% if n.field('excerpt') %}<p class="excerpt">{{ n.field('excerpt') }}</p>{% endif %}
+                            <span class="read">Read more →</span>
+                        </div>
+                        {% if n.field('cover_image') %}
+                            <div class="cover" style="background-image:url('{{ n.field('cover_image')|escape('html_attr') }}');"></div>
+                        {% endif %}
+                    </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

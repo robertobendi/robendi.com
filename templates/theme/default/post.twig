@@ -1,0 +1,65 @@
+{% extends '@theme/layout.twig' %}
+{% set meta_description = entry.field('excerpt') %}
+
+{% block title %}{{ entry.field('title') }} · {{ site.name }}{% endblock %}
+
+{% block head %}
+{% if entry.field('cover_image') %}<meta property="og:image" content="{{ entry.field('cover_image') }}">{% endif %}
+<style>
+    .post-head { padding: 9rem 0 2rem; }
+    .post-head .crumb { color: var(--text-mute); font-family: 'JetBrains Mono', monospace; font-size: .8125rem; margin-bottom: 1.5rem; display: inline-block; }
+    .post-head .crumb a { color: var(--text-mute); border-bottom: 1px solid var(--line-strong); padding-bottom: 1px; }
+    .post-head .crumb a:hover { color: var(--accent); border-color: var(--accent); }
+    .post-head h1 { margin: 0 0 1rem; }
+    .post-head .post-meta {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: .8125rem;
+        color: var(--text-mute);
+        margin-bottom: 2rem;
+    }
+    .post-head .lede {
+        font-family: 'Instrument Serif', Georgia, serif;
+        font-size: clamp(1.25rem, 2.5vw, 1.625rem);
+        line-height: 1.4;
+        color: var(--text);
+        font-style: italic;
+        margin: 0 0 2rem;
+        max-width: 56ch;
+    }
+    .post-cover { margin: 0 auto 4rem; max-width: 1080px; padding: 0 clamp(1.25rem, 4vw, 2.5rem); }
+    .post-cover img { width: 100%; border-radius: var(--radius); border: 1px solid var(--line); }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="post-head">
+    <div class="wrap-prose">
+        <a class="crumb" href="/blog">← All posts</a>
+        <h1 data-reveal>{{ entry.field('title') }}</h1>
+        <p class="post-meta" data-reveal>
+            {{ (entry.publishAt ?? entry.createdAt)|date('F j, Y') }}
+            · by {{ entry.field('author', 'Roberto Bendinelli') }}
+        </p>
+        {% if entry.field('excerpt') %}<p class="lede" data-reveal>{{ entry.field('excerpt') }}</p>{% endif %}
+    </div>
+</section>
+
+{% if entry.field('cover_image') %}
+<div class="post-cover" data-reveal>
+    <img src="{{ entry.field('cover_image') }}" alt="{{ entry.field('title') }}" loading="eager" decoding="async" fetchpriority="high" width="1200" height="630">
+</div>
+{% endif %}
+
+<section class="tight">
+    <article class="wrap-prose article-body" data-reveal>
+        {{ entry.field('body')|markdown }}
+    </article>
+</section>
+
+<section class="tight">
+    <div class="wrap-prose" style="text-align:center;">
+        <hr>
+        <p style="color:var(--text-mute);"><a href="/blog" style="color:var(--accent);border-bottom:1px solid var(--accent);">← All posts</a></p>
+    </div>
+</section>
+{% endblock %}

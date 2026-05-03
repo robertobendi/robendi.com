@@ -1,0 +1,101 @@
+{% extends '@theme/layout.twig' %}
+{% set meta_description = entry.field('summary') %}
+
+{% block title %}{{ entry.field('title') }} · Projects · {{ site.name }}{% endblock %}
+
+{% block head %}
+{% if entry.field('cover_image') %}
+<meta property="og:image" content="{{ entry.field('cover_image') }}">
+{% endif %}
+<style>
+    .project-head { padding: 9rem 0 3rem; }
+    .project-head .crumb { color: var(--text-mute); font-family: 'JetBrains Mono', monospace; font-size: .8125rem; margin-bottom: 1.5rem; display: inline-block; }
+    .project-head .crumb a { color: var(--text-mute); border-bottom: 1px solid var(--line-strong); padding-bottom: 1px; }
+    .project-head .crumb a:hover { color: var(--accent); border-color: var(--accent); }
+    .project-head h1 { margin: 0 0 1rem; }
+    .project-head .summary { font-size: 1.25rem; color: var(--text-soft); max-width: 56ch; margin: 0 0 2rem; }
+    .project-head .actions { display: flex; gap: .75rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .project-head .award {
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        padding: .5rem 1rem;
+        border-radius: 999px;
+        background: linear-gradient(135deg, rgba(255,200,80,.18), rgba(255,140,60,.12));
+        border: 1px solid rgba(255,180,80,.4);
+        color: rgb(255,210,140);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: .8125rem;
+        font-weight: 500;
+        margin-bottom: 1.5rem;
+    }
+    .project-head .award svg { flex-shrink: 0; }
+    .project-head .tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .project-head .tag {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: .75rem;
+        color: var(--text-soft);
+        padding: .25rem .65rem;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+    }
+    .project-cover {
+        margin: 0 auto 4rem;
+        max-width: 1080px;
+        padding: 0 clamp(1.25rem, 4vw, 2.5rem);
+    }
+    .project-cover img {
+        width: 100%;
+        border-radius: var(--radius);
+        border: 1px solid var(--line);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="project-head">
+    <div class="wrap">
+        <a class="crumb" href="/projects">← All projects</a>
+        {% if entry.field('award') %}
+            <div class="award" data-reveal>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                {{ entry.field('award') }}
+            </div>
+        {% endif %}
+        <h1 data-reveal>{{ entry.field('title') }}</h1>
+        <p class="summary" data-reveal>{{ entry.field('summary') }}</p>
+        <div class="actions" data-reveal>
+            {% if entry.field('live_url') %}<a class="btn btn-primary" href="{{ entry.field('live_url') }}" rel="noopener">View live →</a>{% endif %}
+            {% if entry.field('github_url') %}<a class="btn btn-ghost" href="{{ entry.field('github_url') }}" rel="noopener">Source on GitHub ↗</a>{% endif %}
+        </div>
+        {% if entry.field('technologies') %}
+            <div class="tags" data-reveal>
+                {% for t in entry.field('technologies')|split(',') %}
+                    <span class="tag">{{ t|trim }}</span>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+{% if entry.field('cover_image') %}
+<div class="project-cover" data-reveal>
+    <img src="{{ entry.field('cover_image') }}" alt="{{ entry.field('title') }}" loading="eager" decoding="async" fetchpriority="high" width="1200" height="900">
+</div>
+{% endif %}
+
+{% if entry.field('body') %}
+<section class="tight">
+    <article class="wrap-prose article-body" data-reveal>
+        {{ entry.field('body')|markdown }}
+    </article>
+</section>
+{% endif %}
+
+<section class="tight">
+    <div class="wrap-prose" style="text-align:center;">
+        <hr>
+        <p style="color:var(--text-mute);">Want to see more? <a href="/projects" style="color:var(--accent);border-bottom:1px solid var(--accent);">Browse all projects →</a></p>
+    </div>
+</section>
+{% endblock %}

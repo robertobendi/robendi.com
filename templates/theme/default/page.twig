@@ -1,0 +1,41 @@
+{% extends '@theme/layout.twig' %}
+{% set meta_description = entry.field('meta_description') %}
+
+{% block title %}{{ entry.field('title') }} · {{ site.name }}{% endblock %}
+
+{% block head %}
+<style>
+    .page-head { padding: 9rem 0 2rem; }
+    .page-head .crumb { color: var(--text-mute); font-family: 'JetBrains Mono', monospace; font-size: .8125rem; margin-bottom: 1.5rem; display: inline-block; }
+    .page-head .crumb a { color: var(--text-mute); border-bottom: 1px solid var(--line-strong); padding-bottom: 1px; }
+    .page-head .crumb a:hover { color: var(--accent); border-color: var(--accent); }
+    .page-head h1 { margin: 0 0 1rem; }
+    .page-head .lede {
+        font-family: 'Instrument Serif', Georgia, serif;
+        font-size: clamp(1.25rem, 2.5vw, 1.625rem);
+        line-height: 1.4;
+        color: var(--text);
+        font-style: italic;
+        margin: 0 0 1rem;
+        max-width: 60ch;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="page-head">
+    <div class="wrap-prose">
+        <a class="crumb" href="/">← Home</a>
+        <h1 data-reveal>{{ entry.field('title') }}</h1>
+        {% if entry.field('lede') %}<p class="lede" data-reveal>{{ entry.field('lede') }}</p>{% endif %}
+    </div>
+</section>
+
+{% if entry.field('body') %}
+<section class="tight">
+    <article class="wrap-prose article-body" data-reveal>
+        {{ entry.field('body')|markdown }}
+    </article>
+</section>
+{% endif %}
+{% endblock %}
