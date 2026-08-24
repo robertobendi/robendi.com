@@ -30,3 +30,7 @@
 .idea/
 .vscode/
 *.log
+
+# Node / build output
+/node_modules
+/build
